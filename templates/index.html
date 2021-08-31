@@ -2,10 +2,31 @@
 
 <html lang="en">
     <head>
-        
+        <link href="/static/styles.css" rel="stylesheet">
+        <title>Qual Coder</title>
     </head>
 
     <body>
+        <h1>Upload Data</h1>
+        <form name="upload" action="/" method="post" enctype="multipart/form-data">
+            <label for="upload_data" class="block">
+                Choose Data<input type="file" name="upload_data">
+            </label>
+            <label for="upload_codes" class="block">
+                Choose Codes<input type="file" name="upload_codes">
+            </label>
+            <input type="submit" name="submit_data">
+        </form>
 
+        <h1>Code Data</h1>
+        <h2>Select Data</h2>
+        <form>
+            <label for="test" class="block">
+                <input type="radio" name="select_data" id="test" value="test">Test
+            </label>
+            <label for="test2" class="block">
+                <input type="radio" name="select_data" id="test2" value="test2">Test 2
+            </label>
+        </form>
     </body>
 </html>
