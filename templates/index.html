@@ -20,13 +20,18 @@
 
         <h1>Code Data</h1>
         <h2>Select Data</h2>
-        <form>
-            <label for="test" class="block">
-                <input type="radio" name="select_data" id="test" value="test">Test
+        <form name="select_data" action="/code" method="post" autocomplete="off">
+            <label for="select_table">
+                <input name="select_table" list="tables">
             </label>
-            <label for="test2" class="block">
-                <input type="radio" name="select_data" id="test2" value="test2">Test 2
-            </label>
+            <datalist id="tables">
+                {% for table in tables %}
+                    <option value='{{ table }}'>
+                {% endfor %}
+            </datalist>
+            <input type="submit" name="code_table">
         </form>
+
+        <p>{{ message }}</p>
     </body>
 </html>

@@ -28,7 +28,10 @@ def index():
         return redirect("/")
 
     else:
-        return render_template("index.html")
+        conn = sqlite3.connect("qual_data.db")
+        cursor = conn.cursor()
+        tables = cursor.execute("SELECT table_data FROM data_code_linkage").fetchall()[0]
+        return render_template("index.html", tables = tables)
 
 
 def create_table(input):
@@ -95,3 +98,13 @@ def link_tables(table_name_data, table_name_codes):
     # finalize changes to the table
     conn.commit()
     conn.close()
+
+@app.route("/code", methods = ["GET", "POST"])
+def code():
+    if request.method == "POST":
+        data = request.form.get("select_table")
+        if not data:
+            return render_template("index.html", message = "Missing data to code")
+        return render_template("code.html")
+    else:
+        return redirect("/")
