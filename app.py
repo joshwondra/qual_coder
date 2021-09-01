@@ -6,6 +6,7 @@ import os
 
 app = Flask(__name__)
 
+#### Input new data
 @app.route("/", methods = ["GET", "POST"])
 def index():
     if request.method == "POST":
@@ -18,87 +19,102 @@ def index():
         if not codes:
             return render_template("index.html", message = "Missing qualitative codes")
 
-        # create tables for the data and codes, function returns the table names
-        table_data = create_table(data)
-        table_codes = create_table(codes)
-
-        # create a table that links the data to the codes
-        link_tables(table_data, table_codes)
+        # create tables for the data and codes
+        create_table(data, codes)
 
         return redirect("/")
 
     else:
         conn = sqlite3.connect("qual_data.db")
         cursor = conn.cursor()
-        tables = cursor.execute("SELECT table_data FROM data_code_linkage").fetchall()[0]
+        tables_init = cursor.execute("SELECT table_name FROM table_list").fetchall()
+        tables = ()
+        if len(tables_init) > 0:
+            tables = tables_init[0]
         return render_template("index.html", tables = tables)
 
 
-def create_table(input):
+def create_table(input_data, input_codes):
 
-    # temporarily save file
-    input.save("temp.csv")
+    #### Temporarily save data and code files
+    input_data.save("temp_data.csv")
+    input_codes.save("temp_codes.csv")
 
-    with open("temp.csv") as file:
+    #### Open SQLite connection
+    conn = sqlite3.connect("qual_data.db")
+    cursor = conn.cursor()
+
+    #### Write data and codes to a table
+    with open("temp_data.csv") as data, open("temp_codes.csv") as codes:
+
+        #### Data - prepare data to add to table
 
         # read in data
-        reader = csv.reader(file)
-        header = next(reader)
+        reader = csv.reader(data)
+        header = next(reader) # save column names
+        
+        # prepare table name and column names
+        test = input_data.filename
+        tablename = clean_string(input_data.filename)
+        colnames = prep_colnames(header)
 
-        # get table name
-        tablename_init = input.filename.lower().replace('.csv', '') # set to lower case and get rid of the .csv ending
-        tablename = re.sub(r'[^\w]', '_', tablename_init) # change punctuation to _ to reduce risk of SQL injection attacks
 
-        # get column names
-        colnames_init = [re.sub(r'[^\w]', '_', colname) for colname in header] # change punctuation to _ to reduce risk of SQL injection attacks 
-        colname_type = ', '.join([colname + " TEXT" for colname in colnames_init]) # prep column names with data type
-        colnames = colname_type.replace(" TEXT", "") # remove data type
+        #### Codes - prepare qualitative codes to add to table
+        codes_reader = csv.reader(codes)
+        # need to put codes in a list since they're coming in the first column instead of first row
+        codenames_init = [] 
+        for row in codes_reader:
+            codenames_init.append(row[0])
+        codenames = prep_colnames(codenames_init)
 
-        # open sqlite conection and create cursor
-        conn = sqlite3.connect("qual_data.db")
-        cursor = conn.cursor()    
 
+
+        #### Create table and insert data
         # create an empty table if it doesn't exist
-        create_query = "CREATE TABLE IF NOT EXISTS {tablename} ({colname_type}, UNIQUE({colnames}))".format(
+        create_query = "CREATE TABLE IF NOT EXISTS {tablename} ({colnames_typed}, UNIQUE({colnames_untyped}))".format(
             tablename = tablename, 
-            colname_type = colname_type, 
-            colnames = colnames
+            colnames_typed = colnames["typed"] + ', ' + codenames["typed"], 
+            colnames_untyped = colnames["untyped"] + ', ' + codenames["untyped"]
             )
         cursor.execute(create_query)
 
         # insert data into the table
-        insert_query = "INSERT OR IGNORE INTO {tablename} ({colnames}) VALUES ({values})".format(
-            tablename = tablename, 
-            colnames = colnames,
+        insert_query = "INSERT OR IGNORE INTO {tablename} ({colnames_untyped}) VALUES ({values})".format(
+            tablename = tablename,
+            colnames_untyped = colnames["untyped"],
             values = ','.join('?' * len(header))
             )
         for row in reader:
             cursor.execute(insert_query, row)
 
-        # finalize changes to the table
-        conn.commit()
-        conn.close()
+
         
-    # remove original data file when we're done
-    os.system("rm temp.csv")
-    return tablename
 
-def link_tables(table_name_data, table_name_codes):
-    # open sqlite conection and create cursor
-    conn = sqlite3.connect("qual_data.db")
-    cursor = conn.cursor() 
+        #### Finalize changes
+        
+        # add record of the new table
+        cursor.execute("INSERT OR IGNORE INTO table_list (table_name) VALUES ('{}')".format(tablename))
 
-    # create table and insert data
-    cursor.execute("CREATE TABLE IF NOT EXISTS data_code_linkage (table_data TEXT, table_code TEXT, UNIQUE(table_data, table_code))")
-    cursor.execute("INSERT OR IGNORE INTO data_code_linkage (table_data, table_code) VALUES('{data}', '{codes}')".format(
-        data = table_name_data, 
-        codes = table_name_codes
-        ))
 
-    # finalize changes to the table
+    #### Commit changes and close SQL connection
     conn.commit()
     conn.close()
 
+    #### Remove data and code files
+    os.system("rm temp_data.csv temp_codes.csv")
+
+def clean_string(string): # formats string and cleans it to reduce risk of SQL injection attacks
+    string_temp = string.lower().replace('.csv', '') # lower case, remove .csv
+    string_cleaned = re.sub(r'[^\w]', '_', string_temp) # change punctuation to _
+    return string_cleaned
+
+def prep_colnames(colnames): # takes list of column names as input, cleans them, and stores names with type and without
+    cleaned = [clean_string(colname) for colname in colnames] # format and clean column names
+    typed = ', '.join([colname + " TEXT" for colname in cleaned]) # get column names with TEXT data type
+    untyped = typed.replace(" TEXT", "") # remove TEXT data type
+    return {"typed": typed, "untyped": untyped}
+
+#### Select data to code
 @app.route("/code", methods = ["GET", "POST"])
 def code():
     if request.method == "POST":
