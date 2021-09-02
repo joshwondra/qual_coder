@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="/static/styles.css" rel="stylesheet">
+        <title>Qual Coder</title>
+    </head>
+
+    <body>
+        <div id="display_qual" name="display_qual">
+            <p>{{ data }}</p>
+        </div>
+        <div id="display_codes" name="display_codes">
+            <form name="code_form" action="/code" method="post">
+                {% for code in codes %}
+                {{ code }}<input type="checkbox" name="code">
+                {% endfor %}
+                <input type="submit" name="change_codes">
+            </form>
+        </div>
+    </body>
+</html>

@@ -15,12 +15,12 @@
             <label for="upload_codes" class="block">
                 Choose Codes<input type="file" name="upload_codes">
             </label>
-            <input type="submit" name="submit_data">
+            <input type="submit" name="submit_data" value="">
         </form>
 
         <h1>Code Data</h1>
         <h2>Select Data</h2>
-        <form name="select_data" action="/code" method="post" autocomplete="off">
+        <form name="select_data" action="/" method="post" autocomplete="off">
             <label for="select_table">
                 <input name="select_table" list="tables">
             </label>
@@ -29,9 +29,17 @@
                     <option value='{{ table }}'>
                 {% endfor %}
             </datalist>
-            <input type="submit" name="code_table">
+            <input type="submit" name="code_data">
         </form>
-
-        <p>{{ message }}</p>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class = "flashes">
+                        {% for message in messages %}
+                        <li>{{ message }}</li>
+                        {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
     </body>
 </html>

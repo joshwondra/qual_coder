@@ -1,28 +1,42 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, flash, url_for
 import csv
 import sqlite3
 import re
 import os
 
 app = Flask(__name__)
+app.secret_key = 'keyfornow'
 
 #### Input new data
 @app.route("/", methods = ["GET", "POST"])
 def index():
     if request.method == "POST":
+        
+        if "submit_data" in request.form:
+            # get data and codes, return error message if they aren't present
+            data = request.files["upload_data"]
+            if not data:
+                flash("Missing data to upload")
+                return redirect('/')
+            codes = request.files["upload_codes"]
+            if not codes:
+                flash("Missing qualitative codes")
+                return redirect('/')
 
-        # get data and codes, return error message if they aren't present
-        data = request.files["upload_data"]
-        if not data:
-            return render_template("index.html", message = "Missing data to upload")
-        codes = request.files["upload_codes"]
-        if not codes:
-            return render_template("index.html", message = "Missing qualitative codes")
+            # create tables for the data and codes
+            create_table(data, codes)
 
-        # create tables for the data and codes
-        create_table(data, codes)
+            return redirect("/")
 
-        return redirect("/")
+        if "code_data" in request.form:
+            data = request.form.get("select_table")
+            if not data:
+                flash("Missing data to code")
+                return redirect("/")
+
+            return redirect(url_for("code", data = data))
+
+            
 
     else:
         conn = sqlite3.connect("qual_data.db")
@@ -115,12 +129,10 @@ def prep_colnames(colnames): # takes list of column names as input, cleans them,
     return {"typed": typed, "untyped": untyped}
 
 #### Select data to code
-@app.route("/code", methods = ["GET", "POST"])
+@app.route("/code.html", methods = ["GET", "POST"])
 def code():
     if request.method == "POST":
-        data = request.form.get("select_table")
-        if not data:
-            return render_template("index.html", message = "Missing data to code")
         return render_template("code.html")
     else:
-        return redirect("/")
+        data = request.args.get("data")
+        return render_template("code.html", data = data)
