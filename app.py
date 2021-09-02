@@ -131,8 +131,27 @@ def prep_colnames(colnames): # takes list of column names as input, cleans them,
 #### Select data to code
 @app.route("/code.html", methods = ["GET", "POST"])
 def code():
+
+    # Open SQL connection, read in data from SQL table, and set data index to 0
+    conn = sqlite3.connect("qual_data.db")
+    cursor = conn.cursor()
+    data = cursor.execute("SELECT * FROM {}".format(request.args.get("data")))
+    index = 1
+    data_full = data.fetchall()
+
+    # Get the qualitative codes
+    codes = []
+    for i in range(2, len(data.description)):
+        codes.append(data.description[i][0])
+
     if request.method == "POST":
         return render_template("code.html")
+
     else:
-        data = request.args.get("data")
-        return render_template("code.html", data = data)
+        # construct the display data
+        display_data = {"id": data_full[index][0], "text": data_full[index][1]}
+        for i in range(len(codes)):
+            display_data[codes[i]] = data_full[index][i + 2]
+    
+        #for code in data[data_index]
+        return render_template("code.html", display_data = display_data, codes = codes)

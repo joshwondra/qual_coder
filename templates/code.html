@@ -7,8 +7,11 @@
     </head>
 
     <body>
+        <div id="display_id" name="display_id">
+            <p>{{ display_data["id"] }}</p>
+        </div>
         <div id="display_qual" name="display_qual">
-            <p>{{ data }}</p>
+            <p>{{ display_data["text"] }}</p>
         </div>
         <div id="display_codes" name="display_codes">
             <form name="code_form" action="/code" method="post">
