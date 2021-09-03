@@ -140,6 +140,7 @@ def code():
     tablename = session["tablename"]
     data = cursor.execute("SELECT * FROM {}".format(tablename))
     data_full = data.fetchall()
+
     index = session["index"]
 
     # Get column names and qualitative codes
@@ -150,28 +151,35 @@ def code():
     code_values = []
 
     if request.method == "POST":
-        for code in codes:
-            if request.form.get(code) == 'on':
-                code_values.append("1")
-            else:
-                code_values.append("0")
-        values = list(data_full[index][0:2])
-        for value in code_values:
-            values.append(value)
 
-        insert_query = "INSERT OR REPLACE INTO {tablename} ({colnames}) VALUES ({values})".format(
-            tablename = tablename,
-            colnames = ', '.join(colnames),
-            values = ', '.join(['?'] * len(values))
-        )
-        cursor.execute(insert_query, values)
-        
-        #### Commit changes and close SQL connection
-        conn.commit()
-        conn.close()
+        if "back" in request.form:
+            if session["index"] > 0:
+                session["index"] -= 1
+            return redirect("/code")
 
-        session["index"] += 1
-        return redirect("/code")
+        else:
+            for code in codes:
+                if request.form.get(code) == 'on':
+                    code_values.append("1")
+                else:
+                    code_values.append("0")
+            values = list(data_full[index][0:2])
+            for value in code_values:
+                values.append(value)
+
+            insert_query = "INSERT OR REPLACE INTO {tablename} ({colnames}) VALUES ({values})".format(
+                tablename = tablename,
+                colnames = ', '.join(colnames),
+                values = ', '.join(['?'] * len(values))
+            )
+            cursor.execute(insert_query, values)
+            
+            #### Commit changes and close SQL connection
+            conn.commit()
+            conn.close()
+
+            session["index"] += 1
+            return redirect("/code")
 
     else:
         if index >= len(data_full):
@@ -182,12 +190,10 @@ def code():
         display_data = {"id": data_full[index][0], "text": data_full[index][1]}
         for i in range(len(codes)):
             display_data[codes[i]] = data_full[index][i + 2]
-        for value in data_full[index][2:]:
-            code_values.append(value)
         
         #### Commit changes and close SQL connection
         conn.commit()
         conn.close()
     
         #for code in data[data_index]
-        return render_template("code.html", display_data = display_data, codes = codes, code_values = code_values)
+        return render_template("code.html", display_data = display_data, codes = codes)
