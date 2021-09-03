@@ -3,10 +3,18 @@
 <html lang="en">
     <head>
         <link href="/static/styles.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Rubik&family=Fira+Sans" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@150" rel="stylesheet">
+        <!-- Source Serif Pro, Eczar, Roboto Slab, PT Serif, Neuton, Raleway, Karla -->
         <title>Qual Coder</title>
     </head>
 
     <body>
+
+        <header>
+            <h2>Qualitative Data Coder</h2>
+        </header>
+
         <div id="display_id" name="display_id">
             <p>{{ display_data["id"] }}</p>
         </div>
@@ -16,10 +24,13 @@
         <div id="display_codes" name="display_codes">
             <form name="code_form" action="/code" method="post">
                 {% for code in codes %}
-                {{ code }}<input type="checkbox" name= "{{code}}" {% if display_data[code] == '1' %} checked {% endif %}>
+                <label for="{{ code }}" class="block">
+                    <input type="checkbox" name= "{{ code }}" {% if display_data[code] == '1' %} checked {% endif %}>
+                    {{ code }}
+                </label>
                 {% endfor %}
-                <input type="submit" name="next" value="Next">
                 <input type="submit" name="back" value="Back">
+                <input type="submit" name="next" value="Next">
                 
             </form>
         </div>

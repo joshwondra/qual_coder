@@ -3,11 +3,17 @@
 <html lang="en">
     <head>
         <link href="/static/styles.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Rubik&family=Fira+Sans" rel="stylesheet">
         <title>Qual Coder</title>
     </head>
 
     <body>
-        <h1>Upload Data</h1>
+
+        <header>
+            <h2>Qualitative Data Coder</h2>
+        </header>
+
+        <h3>Upload Data</h3>
         <form name="upload" action="/" method="post" enctype="multipart/form-data">
             <label for="upload_data" class="block">
                 Choose Data<input type="file" name="upload_data">
@@ -18,8 +24,8 @@
             <input type="submit" name="submit_data">
         </form>
 
-        <h1>Code Data</h1>
-        <h2>Select Data</h2>
+        <h3>Code Data</h3>
+        <h4>Select Data</h4>
         <form name="select_data" action="/" method="post" autocomplete="off">
             <label for="select_table">
                 <input name="select_table" list="tables">
