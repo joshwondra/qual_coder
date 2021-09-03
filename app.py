@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash, url_for
+from flask import Flask, render_template, request, redirect, flash, session
 import csv
 import sqlite3
 import re
@@ -29,12 +29,14 @@ def index():
             return redirect("/")
 
         if "code_data" in request.form:
-            data = request.form.get("select_table")
-            if not data:
+            tablename = request.form.get("select_table")
+            if not tablename:
                 flash("Missing data to code")
                 return redirect("/")
+            session["tablename"] = tablename
+            session["index"] = 0
 
-            return redirect(url_for("code", data = data))
+            return redirect("/code")
 
             
 
@@ -88,7 +90,7 @@ def create_table(input_data, input_codes):
         create_query = "CREATE TABLE IF NOT EXISTS {tablename} ({colnames_typed}, UNIQUE({colnames_untyped}))".format(
             tablename = tablename, 
             colnames_typed = colnames["typed"] + ', ' + codenames["typed"], 
-            colnames_untyped = colnames["untyped"] + ', ' + codenames["untyped"]
+            colnames_untyped = colnames["untyped"]
             )
         cursor.execute(create_query)
 
@@ -129,25 +131,32 @@ def prep_colnames(colnames): # takes list of column names as input, cleans them,
     return {"typed": typed, "untyped": untyped}
 
 #### Select data to code
-@app.route("/code.html", methods = ["GET", "POST"])
+@app.route("/code", methods = ["GET", "POST"])
 def code():
 
-    # Open SQL connection, read in data from SQL table, and set data index to 0
-    conn = sqlite3.connect("qual_data.db")
-    cursor = conn.cursor()
-    data = cursor.execute("SELECT * FROM {}".format(request.args.get("data")))
-    index = 1
-    data_full = data.fetchall()
-
-    # Get the qualitative codes
-    codes = []
-    for i in range(2, len(data.description)):
-        codes.append(data.description[i][0])
-
     if request.method == "POST":
-        return render_template("code.html")
+        code_values = request.form.get("code")
+        session["index"] += 1
+        #return redirect(url_for("code", tablename = tablename))
+        return redirect("/code")
 
     else:
+        # Open SQL connection, read in data from SQL table, and set data index to 0
+        conn = sqlite3.connect("qual_data.db")
+        cursor = conn.cursor()
+        tablename = session["tablename"]
+        index = session["index"]
+        data = cursor.execute("SELECT * FROM {}".format(tablename))
+        data_full = data.fetchall()
+        if index >= len(data_full):
+            flash("No more data to code")
+            return render_template("code.html", display_data = '', codes = '')
+
+        # Get the qualitative codes
+        codes = []
+        for i in range(2, len(data.description)):
+            codes.append(data.description[i][0])
+
         # construct the display data
         display_data = {"id": data_full[index][0], "text": data_full[index][1]}
         for i in range(len(codes)):
