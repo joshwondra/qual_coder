@@ -16,7 +16,7 @@
         <div id="display_codes" name="display_codes">
             <form name="code_form" action="/code" method="post">
                 {% for code in codes %}
-                {{ code }}<input type="checkbox" name="code">
+                {{ code }}<input type="checkbox" name= "{{code}}" {% if display_data[code] == '1' %} checked {% endif %}>
                 {% endfor %}
                 <input type="submit" name="change_codes">
             </form>

@@ -134,33 +134,60 @@ def prep_colnames(colnames): # takes list of column names as input, cleans them,
 @app.route("/code", methods = ["GET", "POST"])
 def code():
 
+    # Open SQL connection, read in data from SQL table, and set data index to 0
+    conn = sqlite3.connect("qual_data.db")
+    cursor = conn.cursor()
+    tablename = session["tablename"]
+    data = cursor.execute("SELECT * FROM {}".format(tablename))
+    data_full = data.fetchall()
+    index = session["index"]
+
+    # Get column names and qualitative codes
+    colnames = []
+    for i in range(len(data.description)):
+        colnames.append(data.description[i][0])
+    codes = colnames[2:]
+    code_values = []
+
     if request.method == "POST":
-        code_values = request.form.get("code")
+        for code in codes:
+            if request.form.get(code) == 'on':
+                code_values.append("1")
+            else:
+                code_values.append("0")
+        values = list(data_full[index][0:2])
+        for value in code_values:
+            values.append(value)
+
+        insert_query = "INSERT OR REPLACE INTO {tablename} ({colnames}) VALUES ({values})".format(
+            tablename = tablename,
+            colnames = ', '.join(colnames),
+            values = ', '.join(['?'] * len(values))
+        )
+        cursor.execute(insert_query, values)
+        
+        #### Commit changes and close SQL connection
+        conn.commit()
+        conn.close()
+
         session["index"] += 1
-        #return redirect(url_for("code", tablename = tablename))
         return redirect("/code")
 
     else:
-        # Open SQL connection, read in data from SQL table, and set data index to 0
-        conn = sqlite3.connect("qual_data.db")
-        cursor = conn.cursor()
-        tablename = session["tablename"]
-        index = session["index"]
-        data = cursor.execute("SELECT * FROM {}".format(tablename))
-        data_full = data.fetchall()
         if index >= len(data_full):
             flash("No more data to code")
             return render_template("code.html", display_data = '', codes = '')
-
-        # Get the qualitative codes
-        codes = []
-        for i in range(2, len(data.description)):
-            codes.append(data.description[i][0])
 
         # construct the display data
         display_data = {"id": data_full[index][0], "text": data_full[index][1]}
         for i in range(len(codes)):
             display_data[codes[i]] = data_full[index][i + 2]
+        for value in data_full[index][2:]:
+            code_values.append(value)
+        
+        #### Commit changes and close SQL connection
+        conn.commit()
+        conn.close()
     
         #for code in data[data_index]
-        return render_template("code.html", display_data = display_data, codes = codes)
+        return render_template("code.html", display_data = display_data, codes = codes, code_values = code_values)
