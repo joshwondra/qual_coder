@@ -188,6 +188,7 @@ def code():
 
         # construct the display data
         display_data = {"id": data_full[index][0], "text": data_full[index][1]}
+        display_data["text"] = display_data["text"].replace("\n", "<br />")
         for i in range(len(codes)):
             display_data[codes[i]] = data_full[index][i + 2]
         

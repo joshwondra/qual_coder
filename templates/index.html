@@ -2,41 +2,84 @@
 
 <html lang="en">
     <head>
+        <link href="/static/normalize.css" rel="stylesheet">
+        <!-- Material design links -->
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Round">  
         <link href="/static/styles.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Rubik&family=Fira+Sans" rel="stylesheet">
+        
+              
+        
+        
         <title>Qual Coder</title>
     </head>
 
     <body>
 
         <header>
-            <h2>Qualitative Data Coder</h2>
+            <h5>Qualitative Data Coder</h5>
         </header>
 
-        <h3>Upload Data</h3>
-        <form name="upload" action="/" method="post" enctype="multipart/form-data">
-            <label for="upload_data" class="block">
-                Choose Data<input type="file" name="upload_data">
-            </label>
-            <label for="upload_codes" class="block">
-                Choose Codes<input type="file" name="upload_codes">
-            </label>
-            <input type="submit" name="submit_data">
-        </form>
+        <div class="container">
+            <div class="row">
+                <section class="column card">
+                    <div class="card-header">
+                        <span class="material-icons-round card-thumbnail">
+                            file_upload
+                        </span>
+                        <h5 class="card-title">Upload</h5>
+                    </div>
+                    <div class="card-body">
+                        <form name="upload" action="/" method="post" enctype="multipart/form-data">
+                            
+                            <span class="card-item">
+                                <label for="upload_data">Data</label>
+                                <input type="file" name="upload_data" id="upload_data" />
+                            </span>
 
-        <h3>Code Data</h3>
-        <h4>Select Data</h4>
-        <form name="select_data" action="/" method="post" autocomplete="off">
-            <label for="select_table">
-                <input name="select_table" list="tables">
-            </label>
-            <datalist id="tables">
-                {% for table in tables %}
-                    <option value='{{ table }}'>
-                {% endfor %}
-            </datalist>
-            <input type="submit" name="code_data">
-        </form>
+                            <span class="card-item">
+                                <label for="upload_codes">Qualitative Codes</label>
+                                <input type="file" name="upload_codes" id="upload_codes" />
+                            </span>
+
+                            <input type="submit" name="submit_data" class="card-submit" />
+                            
+                        </form>
+                    </div>
+                </section>
+
+                <section class="column card">
+                    <div class="card-header">
+                        <span class="material-icons-round card-thumbnail">
+                            check
+                        </span>
+                        <h5 class="card-title">Code</h5>
+                    </div>
+                    <div class="card-body">
+                        <form name="select_data" action="/" method="post" autocomplete="off">
+
+                            <span class="card-item">
+                                <label for="select_table">Select Data </label>
+                                <input name="select_table" list="tables" />
+                                <datalist id="tables">
+                                    {% for table in tables %}
+                                        <option value='{{ table }}'>
+                                    {% endfor %}
+                                </datalist>
+                            </span>
+                            
+                            <input type="submit" name="code_data" class="card-submit">
+
+                        </form>
+                    </div>
+                </section>
+            </div>
+
+        </div>
+            
+        
         
         {% with messages = get_flashed_messages() %}
             {% if messages %}

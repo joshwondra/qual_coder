@@ -3,19 +3,28 @@ General: Inter, Rubik, Fira Sans, Roboto, Karla
 Text to code: Source Serif Pro, Eczar, Roboto Slab, PT Serif, Neuton, Raleway, Karla
 */
 
-.block {
-    display: block;
+/* color palette
+F9C041, EC8D44, E49956, FBF2D2, 67CFCC
+*/
+
+body {
+    font-family: "Fira Sans";
+    font-size: 16px;
+    /*
+    background: #e2e1e0; 
+    background: #ffd0b0;
+    */
+    background: #e2f8ff;
 }
 
-#display_qual {
-    font-family: "Roboto Slab";
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 100;
+header {
+    margin: 20px;
+    color: #006bae;
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: "Rubik";
+    margin-block: 0;
 }
 
 h1 {
@@ -42,12 +51,106 @@ h6 {
     font-size: 20px;
 }
 
-body {
-    font-family: "Fira Sans";
-    font-size: 16px;
-}
-
 button, input {
     font-family: "Rubik";
     font-size: 14px;
+}
+
+label {
+    margin-right: 10px;
+    color: #ff9e80;
+}
+
+.block {
+    display: block;
+}
+
+.container {
+    display: block;
+}
+
+.row {
+    display:flex; 
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+}
+
+.card, .text, #display_codes { /* Credit: https://codepen.io/sdthornton/pen/wBZdXq */
+    border-radius: 2px;
+    background: white;
+    display: inline-block;
+    margin: 1rem;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    /*padding: 1rem;*/
+}
+
+.card {
+    height:300px;
+    width: 300px;
+}
+
+.card:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+
+#display_codes {
+    padding: 1rem;
+    position:fixed;
+    height: 100%;
+    width: 100%;
+}
+
+.card-header {
+    background: #47d5ff;
+    padding: 1rem;
+    align-items: center;
+}
+
+.card-thumbnail {
+    border-radius: 50px;
+    padding: 1px;
+    color: #ff9e80;
+}
+
+.card-title {
+    display: inline-block;
+    color: white;
+}
+
+.card-body {
+    background: white;
+    padding: 1rem;
+    color: #606060;
+}
+
+.card-item, .card-submit {
+    margin-top: 20px;
+    display: block;
+}
+
+.text {
+    width: 600px;
+    height: fit-content;
+}
+
+#display_qual {
+    font-family: "Roboto Slab";
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.code-item {
+    display: block;
+    margin: 1rem;
 }
