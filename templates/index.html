@@ -2,49 +2,52 @@
 
 <html lang="en">
     <head>
+
+        <title>Qual Coder</title>
+
+        <!-- Normalize CSS -->
         <link href="/static/normalize.css" rel="stylesheet">
+
         <!-- Material design links -->
         <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
         <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Round">  
+
+        <!-- Main stylesheet and fonts -->
         <link href="/static/styles.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Rubik&family=Fira+Sans" rel="stylesheet">
         
-              
-        
-        
-        <title>Qual Coder</title>
     </head>
 
     <body>
 
         <header>
-            <h5>Qualitative Data Coder</h5>
+            <h1>Qualitative Data Coder</h1>
         </header>
 
         <div class="container">
             <div class="row">
                 <section class="column card">
                     <div class="card-header">
-                        <span class="material-icons-round card-thumbnail">
+                        <span class="card-header-thumbnail material-icons-round">
                             file_upload
                         </span>
-                        <h5 class="card-title">Upload</h5>
+                        <h2 class="card-header-title">Upload</h2>
                     </div>
                     <div class="card-body">
                         <form name="upload" action="/" method="post" enctype="multipart/form-data">
                             
-                            <span class="card-item">
+                            <span class="card-body-item">
                                 <label for="upload_data">Data</label>
                                 <input type="file" name="upload_data" id="upload_data" />
                             </span>
 
-                            <span class="card-item">
+                            <span class="card-body-item">
                                 <label for="upload_codes">Qualitative Codes</label>
                                 <input type="file" name="upload_codes" id="upload_codes" />
                             </span>
 
-                            <input type="submit" name="submit_data" class="card-submit" />
+                            <input type="submit" name="submit_data" class="card-body-submit" />
                             
                         </form>
                     </div>
@@ -52,15 +55,15 @@
 
                 <section class="column card">
                     <div class="card-header">
-                        <span class="material-icons-round card-thumbnail">
+                        <span class="card-header-thumbnail material-icons-round">
                             check
                         </span>
-                        <h5 class="card-title">Code</h5>
+                        <h2 class="card-header-title">Code</h2>
                     </div>
                     <div class="card-body">
                         <form name="select_data" action="/" method="post" autocomplete="off">
 
-                            <span class="card-item">
+                            <span class="card-body-item">
                                 <label for="select_table">Select Data </label>
                                 <input name="select_table" list="tables" />
                                 <datalist id="tables">
@@ -70,7 +73,7 @@
                                 </datalist>
                             </span>
                             
-                            <input type="submit" name="code_data" class="card-submit">
+                            <input type="submit" name="code_data" class="card-body-item">
 
                         </form>
                     </div>

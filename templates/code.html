@@ -2,33 +2,39 @@
 
 <html lang="en">
     <head>
+
+        <title>Qual Coder</title>
+
+        <!-- Normalize CSS -->
         <link href="/static/normalize.css" rel="stylesheet">
+
         <!-- Material design links -->
         <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
         <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Round">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Round">  
+
+        <!-- Main stylesheet and fonts -->
         <link href="/static/styles.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Rubik&family=Fira+Sans" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@150" rel="stylesheet">
-    
-        <title>Qual Coder</title>
+
     </head>
 
     <body>
         <header>
-            <h5>Qualitative Data Coder</h5>
+            <h1>Qualitative Data Coder</h1>
         </header>
 
         <div class="container">
 
-            <section class="text">
+            <section class="card text">
                 <div class="card-header">
-                    <span class="material-icons-round card-thumbnail">
+                    <span class="card-header-thumbnail material-icons-round">
                         segment
                     </span>
-                    <h5 class="card-title" id="display_id" name="display_id">ID: {{ display_data["id"] }}</h5>
+                    <h2 class="card-header-title" name="display_id">ID: {{ display_data["id"] }}</h2>
                 </div>
-                <div class="card-body" id="display_qual" name="display_qual">
+                <div class="card-body" name="display_qual">
                     <p> {% autoescape false %}
                             {{ display_data["text"] }}
                         {% endautoescape %}
@@ -36,12 +42,12 @@
                 </div>
             </section>
 
-            <section id="display_codes" name="display_codes">
-                <h5>Qualitative Codes</h5>
+            <section class="codes" name="display_codes">
+                <h3>Qualitative Codes</h3>
                 
                 <form name="code_form" action="/code" method="post">
                     {% for code in codes %}
-                    <span class="code-item">
+                    <span class="codes-item">
                         <input type="checkbox" name= "{{ code }}" {% if display_data[code] == '1' %} checked {% endif %}>
                         <label for="{{ code }}">{{ code }}</label>  
                     </span>  

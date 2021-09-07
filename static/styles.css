@@ -3,154 +3,137 @@ General: Inter, Rubik, Fira Sans, Roboto, Karla
 Text to code: Source Serif Pro, Eczar, Roboto Slab, PT Serif, Neuton, Raleway, Karla
 */
 
-/* color palette
-F9C041, EC8D44, E49956, FBF2D2, 67CFCC
-*/
+
+/* add color palette */
+:root {
+    --dark-blue: #006bae;
+    --blue: #47d5ff;
+    --light-blue: #e2f8ff;
+    --orange: #ff9e80;
+    --text-grey: #606060;
+}
 
 body {
-    font-family: "Fira Sans";
-    font-size: 16px;
-    /*
-    background: #e2e1e0; 
-    background: #ffd0b0;
-    */
-    background: #e2f8ff;
+    background: var(--light-blue);
 }
 
 header {
-    margin: 20px;
-    color: #006bae;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: "Rubik";
-    margin-block: 0;
+    margin: 2vw;
 }
 
 h1 {
-    font-size: 98px;
+    margin-block: 0;
+    font-family: "Rubik";
+    color: var(--dark-blue);
+    font-size: 4vw;
 }
 
 h2 {
-    font-size: 61px;
+    font-family: "Rubik";
+    margin-block: 0;
+    font-size: 3vw;
+    color: white;
 }
 
 h3 {
-    font-size: 49px;
+    font-family: "Rubik";
+    margin-block: 0;
+    font-size: 2vw;
+    color: var(--blue);
 }
 
-h4 {
-    font-size: 35px;
-}
-
-h5 {
-    font-size: 24px;
-}
-
-h6 {
-    font-size: 20px;
+p {
+    font-family: "Roboto Slab";
+    font-size: 1.5vw;
+    line-height: 1.8;
+    color: var(--text-grey);
 }
 
 button, input {
     font-family: "Rubik";
-    font-size: 14px;
+    font-size: 1vw;
 }
 
 label {
-    margin-right: 10px;
-    color: #ff9e80;
-}
-
-.block {
-    display: block;
+    margin-right: 1vw;
+    color: var(--orange);
 }
 
 .container {
     display: block;
 }
 
-.row {
-    display:flex; 
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
-}
+    .row {
+        display: flex; 
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+    }
 
-.column {
-    display: flex;
-    flex-direction: column;
-    flex-basis: 100%;
-    flex: 1;
-}
+    .column {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 100%;
+        flex: 1;
+    }
 
-.card, .text, #display_codes { /* Credit: https://codepen.io/sdthornton/pen/wBZdXq */
-    border-radius: 2px;
+.card { /* Credit for much of the card CSS (including hover): https://codepen.io/sdthornton/pen/wBZdXq */
+    max-height: 50vw;
+    max-width: 60vw;
+    margin: 2vw;
+    border-radius: .5vw;
     background: white;
-    display: inline-block;
-    margin: 1rem;
-    position: relative;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 .25vw .75vw rgba(0,0,0,0.12), 0 .25vw .5vw rgba(0,0,0,0.24);
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-    /*padding: 1rem;*/
 }
 
-.card {
-    height:300px;
-    width: 300px;
-}
+    .card:hover {
+        box-shadow: 0 1.75vw 3.5vw rgba(0,0,0,0.25), 0 1.25vw 1.25vw rgba(0,0,0,0.22);
+    }
 
-.card:hover {
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
-}
+    .card-header, .card-body {
+        display: flex;
+        padding: 2vw;
+    }
 
-#display_codes {
-    padding: 1rem;
-    position:fixed;
-    height: 100%;
-    width: 100%;
-}
+    .card-header {
+        background: var(--blue);
+    }
 
-.card-header {
-    background: #47d5ff;
-    padding: 1rem;
-    align-items: center;
-}
+        .card-header-thumbnail {
+            font-size: 3vw;
+            margin-right: 1vw;
+            color: var(--orange);
+        }
 
-.card-thumbnail {
-    border-radius: 50px;
-    padding: 1px;
-    color: #ff9e80;
-}
+    .card-body {
+        background: white;
+    }
 
-.card-title {
-    display: inline-block;
-    color: white;
-}
-
-.card-body {
-    background: white;
-    padding: 1rem;
-    color: #606060;
-}
-
-.card-item, .card-submit {
-    margin-top: 20px;
-    display: block;
-}
+        .card-body-item {
+            margin: 2vw 0;
+            display: block;
+        }
 
 .text {
-    width: 600px;
+    max-height: 100%;
     height: fit-content;
+    }
+
+.codes {
+    padding: 1vw;
+    position:fixed;
+    height: 100%;
+    width: 33vw;
+    top: 8vw;
+    right: 0;
 }
 
-#display_qual {
-    font-family: "Roboto Slab";
-    font-size: 14px;
-    line-height: 1.8;
-}
+    .codes h2 {
+        color: var(--orange);
+    }
 
-.code-item {
-    display: block;
-    margin: 1rem;
-}
+    .codes-item {
+        display: block;
+        margin: 1vw;
+    }
