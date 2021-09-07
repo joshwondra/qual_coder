@@ -129,10 +129,6 @@ label {
     right: 0;
 }
 
-    .codes h2 {
-        color: var(--orange);
-    }
-
     .codes-item {
         display: block;
         margin: 1vw;

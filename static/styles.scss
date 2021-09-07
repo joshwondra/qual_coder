@@ -1,0 +1,61 @@
+/* typefaces to consider: 
+General: Inter, Rubik, Fira Sans, Roboto, Karla
+Text to code: Source Serif Pro, Eczar, Roboto Slab, PT Serif, Neuton, Raleway, Karla
+*/
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Rubik"
+}
+
+$mdc-typography-styles-headline1: (
+  font-family: unquote("Rubik"),
+  font-size: 98
+);
+$mdc-typography-styles-headline2: (
+  font-family: unquote("Rubik"),
+  font-size: 61
+);
+$mdc-typography-styles-headline3: (
+  font-family: unquote("Rubik"),
+  font-size: 49
+);
+$mdc-typography-styles-headline4: (
+  font-family: unquote("Rubik"),
+  font-size: 35
+);
+$mdc-typography-styles-headline5: (
+  font-family: unquote("Rubik"),
+  font-size: 24
+);
+$mdc-typography-styles-headline6: (
+  font-family: unquote("Rubik"),
+  font-size: 20
+);
+$mdc-typography-styles-body1: (
+  font-family: unquote("Fira Sans"),
+  font-size: 16
+);
+$mdc-typography-styles-body2: (
+  font-family: unquote("Fira Sans"),
+  font-size: 14
+);
+$mdc-typography-styles-subtitle1: (
+  font-family: unquote("Rubik"),
+  font-size: 16
+);
+$mdc-typography-styles-subtitle2: (
+  font-family: unquote("Rubik"),
+  font-size: 14
+);
+$mdc-typography-styles-button: (
+  font-family: unquote("Fira Sans"),
+  font-size: 14
+);
+$mdc-typography-styles-overline: (
+  font-family: unquote("Fira Sans"),
+  font-size: 10
+);
+$mdc-typography-styles-caption: (
+  font-family: unquote("Fira Sans"),
+  font-size: 12
+);
