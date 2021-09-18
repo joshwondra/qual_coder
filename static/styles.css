@@ -6,15 +6,19 @@ Text to code: Source Serif Pro, Eczar, Roboto Slab, PT Serif, Neuton, Raleway, K
 
 /* add color palette */
 :root {
-    --dark-blue: #006bae;
-    --blue: #47d5ff;
-    --light-blue: #e2f8ff;
-    --orange: #ff9e80;
-    --text-grey: #606060;
+    --dark-blue: rgba(0, 107, 174, 1);
+    --blue: rgba(71, 213, 255, 1);
+    --light-blue: rgba(226, 248, 255, 1);
+    --orange: rgba(255, 158, 128, 1);
+    --orange-hover: rgba(255, 158, 128, .12);
+    --text-grey: rgba(96, 96, 96, 1);
 }
 
 body {
     background: var(--light-blue);
+    font-family: "Rubik";
+    font-size: 1.2vw;
+    color: var(--text-grey);
 }
 
 header {
@@ -49,14 +53,30 @@ p {
     color: var(--text-grey);
 }
 
-button, input {
-    font-family: "Rubik";
-    font-size: 1vw;
+.button, input[type=submit] {
+    border-radius: 4px;
+    padding: .5vw 1vw;
+    text-transform: uppercase;
 }
 
-label {
-    margin-right: 1vw;
+.button {
     color: var(--orange);
+}
+
+.button:hover {
+    opacity: .9;
+    background: var(--orange-hover);
+}
+
+input[type=submit] {
+    color: white;
+    background: var(--orange);
+    border: 0 none;
+}
+
+input[type=submit]:hover {
+    opacity: .88;
+    box-shadow: 0 .12vw .33vw rgba(0,0,0,0.12), 0 .12vw .25vw rgba(0,0,0,0.24);
 }
 
 .container {

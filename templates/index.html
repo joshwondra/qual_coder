@@ -19,6 +19,9 @@
         <!-- Main stylesheet and fonts -->
         <link href="/static/styles.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Rubik&family=Fira+Sans" rel="stylesheet">
+
+        <!-- External JS -->
+        <script src="/static/scripts.js"></script>
         
     </head>
 
@@ -42,15 +45,17 @@
                             
                             <span class="card-body-item">
                                 <label class="button" for="upload_data">Data</label>
-                                <input type="file" name="upload_data" id="upload_data" />
+                                <input type="file" name="upload_data" id="upload_data" hidden onchange="show_filename('upload_data', 'upload_data_file')">
+                                <span id="upload_data_file">No file selected.</span>
                             </span>
 
                             <span class="card-body-item">
                                 <label class="button" for="upload_codes">Qualitative Codes</label>
-                                <input type="file" name="upload_codes" id="upload_codes" />
+                                <input type="file" name="upload_codes" id="upload_codes" hidden onchange="show_filename('upload_codes', 'upload_codes_file')">
+                                <span id="upload_codes_file">No file selected.</span>
                             </span>
 
-                            <input type="submit" name="submit_data" class="card-body-submit" />
+                            <input type="submit" name="submit_data">
                             
                         </form>
                     </div>
@@ -68,7 +73,7 @@
 
                             <span class="card-body-item">
                                 <label for="select_table">Select Data </label>
-                                <input name="select_table" list="tables" />
+                                <input name="select_table" list="tables">
                                 <datalist id="tables">
                                     {% for table in tables %}
                                         <option value='{{ table }}'>
@@ -76,7 +81,7 @@
                                 </datalist>
                             </span>
                             
-                            <input type="submit" name="code_data" class="card-body-item">
+                            <input type="submit" name="code_data">
 
                         </form>
                     </div>
