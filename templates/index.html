@@ -40,6 +40,7 @@
                         </span>
                         <h2 class="card-header-title">Upload</h2>
                     </div>
+                    
                     <div class="card-body">
                         <form name="upload" action="/" method="post" enctype="multipart/form-data">
                             
@@ -89,16 +90,19 @@
             </div>
 
         </div>
-            
-        
-        
+
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <ul class = "flashes">
-                        {% for message in messages %}
-                        <li>{{ message }}</li>
-                        {% endfor %}
-                </ul>
+            <div class="flash-wrapper">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+                <form id="dismiss_form" action="/" method="post">
+                    <input type="text" name="dismiss_submit" id="dismiss_submit" hidden>
+                </form>
+                <button type="button" class="button dismiss_button" onclick="submit_form('dismiss_form', 'dismiss_submit', 'submit')">DISMISS</button>
+                
+            </div>
             {% endif %}
         {% endwith %}
 

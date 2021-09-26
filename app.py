@@ -11,27 +11,37 @@ app.secret_key = 'keyfornow'
 @app.route("/", methods = ["GET", "POST"])
 def index():
     if request.method == "POST":
+
+        if "dismiss_submit" in request.form:
+            return redirect('/')
         
         if "submit_data" in request.form:
             # get data and codes, return error message if they aren't present
             data = request.files["upload_data"]
             if not data:
-                flash("Missing data to upload")
+                flash("Missing data to upload.")
                 return redirect('/')
             codes = request.files["upload_codes"]
             if not codes:
-                flash("Missing qualitative codes")
+                flash("Missing qualitative codes.")
                 return redirect('/')
+
+            # temporarily save data and code files
+            data.save("temp_data.csv")
+            codes.save("temp_codes.csv")
 
             # create tables for the data and codes
             create_table(data, codes)
+
+            # remove data and code files
+            os.system("rm temp_data.csv temp_codes.csv")
 
             return redirect("/")
 
         if "code_data" in request.form:
             tablename = request.form.get("select_table")
             if not tablename:
-                flash("Missing data to code")
+                flash("Missing data to code.")
                 return redirect("/")
             session["tablename"] = tablename
             session["index"] = 0
@@ -52,10 +62,6 @@ def index():
 
 def create_table(input_data, input_codes):
 
-    #### Temporarily save data and code files
-    input_data.save("temp_data.csv")
-    input_codes.save("temp_codes.csv")
-
     #### Open SQLite connection
     conn = sqlite3.connect("qual_data.db")
     cursor = conn.cursor()
@@ -68,9 +74,13 @@ def create_table(input_data, input_codes):
         # read in data
         reader = csv.reader(data)
         header = next(reader) # save column names
+        if len(header) != 2: # make sure there are two columns
+            flash("Data must have two columns.")
+            return redirect('/')
+        if len(list(reader)) < 1: # make sure there's at least one row of data
+            flash("CSV must have one row of column names and at least one row of data.")
         
         # prepare table name and column names
-        test = input_data.filename
         tablename = clean_string(input_data.filename)
         colnames = prep_colnames(header)
 
@@ -78,9 +88,17 @@ def create_table(input_data, input_codes):
         #### Codes - prepare qualitative codes to add to table
         codes_reader = csv.reader(codes)
         # need to put codes in a list since they're coming in the first column instead of first row
-        codenames_init = [] 
+        codenames_init = []
         for row in codes_reader:
-            codenames_init.append(row[0])
+            if len(row) > 1: # make sure there's no more than one value per row
+                flash("Codes must have only one column.")
+                return redirect('/')
+            if row[0] not in codenames_init:
+                codenames_init.append(row[0])
+        if len(codenames_init) == 0: # make sure there's at least one row
+            flash("Codes must have at least one row.")
+            return redirect('/')
+        
         codenames = prep_colnames(codenames_init)
 
 
@@ -115,9 +133,6 @@ def create_table(input_data, input_codes):
     #### Commit changes and close SQL connection
     conn.commit()
     conn.close()
-
-    #### Remove data and code files
-    os.system("rm temp_data.csv temp_codes.csv")
 
 def clean_string(string): # formats string and cleans it to reduce risk of SQL injection attacks
     string_temp = string.lower().replace('.csv', '') # lower case, remove .csv

@@ -36,14 +36,14 @@
             <section class="codes" name="display_codes">
                 <h3>Codes</h3>
                 
-                <form name="code_form" action="/code" method="post">
+                <form name="code_form" id="code_form" action="/code" method="post">
                     {% for code in codes %}
                     <span class="codes-item">
                         <input type="checkbox" name= "{{ code }}" id="{{ code }}" {% if display_data[code] == '1' %} checked {% endif %}>
                         <label for="{{ code }}">{{ code }}</label>  
                     </span>  
                     {% endfor %}
-                    <input type="submit" name="submit_codes" hidden>
+                    <input type="submit" name="submit_codes" id="submit_codes" hidden>
                             
                 </form>
             </section>
@@ -59,8 +59,8 @@
                 </div-->
                 <div class="text-header">
                     <h3>ID: {{ display_data["id"] }}</h3>
-                    <button type="button" class="button" onclick="submit_codes('back')">Back</button>
-                    <button type="button" class="button" onclick="submit_codes('next')">Next</button>
+                    <button type="button" class="button" onclick="submit_form('code_form', 'submit_codes', 'back')">Back</button>
+                    <button type="button" class="button" onclick="submit_form('code_form', 'submit_codes', 'next')">Next</button>
                     <form action="/code" method="post">
                         <label for="jump_to">Jump to</label><input type="number" name="jump_to">
                     </form>
