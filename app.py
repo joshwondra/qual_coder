@@ -152,32 +152,32 @@ def code():
 
     if request.method == "POST":
 
+        for code in codes:
+            if request.form.get(code) == 'on':
+                code_values.append("1")
+            else:
+                code_values.append("0")
+        values = list(data_full[index][0:2])
+        for value in code_values:
+            values.append(value)
+
+        insert_query = "INSERT OR REPLACE INTO {tablename} ({colnames}) VALUES ({values})".format(
+            tablename = tablename,
+            colnames = ', '.join(colnames),
+            values = ', '.join(['?'] * len(values))
+        )
+        cursor.execute(insert_query, values)
+            
+        #### Commit changes and close SQL connection
+        conn.commit()
+        conn.close()
+
         if "back" in request.form:
             if session["index"] > 0:
                 session["index"] -= 1
             return redirect("/code")
 
         else:
-            for code in codes:
-                if request.form.get(code) == 'on':
-                    code_values.append("1")
-                else:
-                    code_values.append("0")
-            values = list(data_full[index][0:2])
-            for value in code_values:
-                values.append(value)
-
-            insert_query = "INSERT OR REPLACE INTO {tablename} ({colnames}) VALUES ({values})".format(
-                tablename = tablename,
-                colnames = ', '.join(colnames),
-                values = ', '.join(['?'] * len(values))
-            )
-            cursor.execute(insert_query, values)
-            
-            #### Commit changes and close SQL connection
-            conn.commit()
-            conn.close()
-
             session["index"] += 1
             return redirect("/code")
 

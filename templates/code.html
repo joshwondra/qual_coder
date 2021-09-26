@@ -18,24 +18,52 @@
 
         <!-- Main stylesheet and fonts -->
         <link href="/static/styles.css" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Rubik&family=Fira+Sans" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300..900" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@150" rel="stylesheet">
+
+        <!-- External JS -->
+        <script src="/static/scripts.js"></script>
 
     </head>
 
     <body>
         <header>
-            <h1>Qualitative Data Coder</h1>
+            <a href="/"><h1>Qualitative Data Coder</h1></a>
         </header>
 
-        <div class="container">
+        <div id="text-codes-wrapper">
+            <section class="codes" name="display_codes">
+                <h3>Codes</h3>
+                
+                <form name="code_form" action="/code" method="post">
+                    {% for code in codes %}
+                    <span class="codes-item">
+                        <input type="checkbox" name= "{{ code }}" id="{{ code }}" {% if display_data[code] == '1' %} checked {% endif %}>
+                        <label for="{{ code }}">{{ code }}</label>  
+                    </span>  
+                    {% endfor %}
+                    <input type="submit" name="submit_codes" hidden>
+                            
+                </form>
+            </section>
 
-            <section class="card text">
-                <div class="card-header">
+            <section class="column text">
+                <!--div class="card-header">
                     <span class="card-header-thumbnail material-icons-round">
                         segment
                     </span>
                     <h2 class="card-header-title" name="display_id">ID: {{ display_data["id"] }}</h2>
+                    <button type="button" onclick="submit_codes('back')">Back</button>
+                    <button type="button" onclick="submit_codes('next')">Next</button>
+                </div-->
+                <div class="text-header">
+                    <h3>ID: {{ display_data["id"] }}</h3>
+                    <button type="button" class="button" onclick="submit_codes('back')">Back</button>
+                    <button type="button" class="button" onclick="submit_codes('next')">Next</button>
+                    <form action="/code" method="post">
+                        <label for="jump_to">Jump to</label><input type="number" name="jump_to">
+                    </form>
                 </div>
                 <div class="card-body" name="display_qual">
                     <p> {% autoescape false %}
@@ -43,22 +71,6 @@
                         {% endautoescape %}
                     </p>
                 </div>
-            </section>
-
-            <section class="codes" name="display_codes">
-                <h3>Qualitative Codes</h3>
-                
-                <form name="code_form" action="/code" method="post">
-                    {% for code in codes %}
-                    <span class="codes-item">
-                        <input type="checkbox" name= "{{ code }}" {% if display_data[code] == '1' %} checked {% endif %}>
-                        <label for="{{ code }}">{{ code }}</label>  
-                    </span>  
-                    {% endfor %}
-                    <input type="submit" name="back" value="Back">
-                    <input type="submit" name="next" value="Next">
-                            
-                </form>
             </section>
     
             <div>
