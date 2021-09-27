@@ -215,7 +215,16 @@ input[type="checkbox"] + label {
         font-weight: 400;
     }
 
-.dismiss_button {
+.dim-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, .7);
+}
+
+.dismiss-button {
     display: block;
     position: absolute;
     right: 0;

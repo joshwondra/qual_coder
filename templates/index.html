@@ -93,15 +93,17 @@
 
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-            <div class="flash-wrapper">
-                {% for message in messages %}
-                <p>{{ message }}</p>
-                {% endfor %}
-                <form id="dismiss_form" action="/" method="post">
-                    <input type="text" name="dismiss_submit" id="dismiss_submit" hidden>
-                </form>
-                <button type="button" class="button dismiss_button" onclick="submit_form('dismiss_form', 'dismiss_submit', 'submit')">DISMISS</button>
-                
+            <div class="dim-background">
+                <div class="flash-wrapper">
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                    <form id="dismiss_form" action="/" method="post">
+                        <input type="text" name="dismiss_submit" id="dismiss_submit" hidden>
+                    </form>
+                    <button type="button" class="button dismiss-button" onclick="submit_form('dismiss_form', 'dismiss_submit', 'submit')">DISMISS</button>
+                    
+                </div>
             </div>
             {% endif %}
         {% endwith %}

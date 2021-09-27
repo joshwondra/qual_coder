@@ -36,6 +36,7 @@ def index():
             # remove data and code files
             os.system("rm temp_data.csv temp_codes.csv")
 
+            flash("Upload succeeded.")
             return redirect("/")
 
         if "code_data" in request.form:
